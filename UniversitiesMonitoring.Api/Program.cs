@@ -1,10 +1,13 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using OfficeOpenXml;
 using UniversitiesMonitoring.Api;
 using UniversitiesMonitoring.Api.Services;
 using UniversitiesMonitoring.Api.WebSocket;
 using UniversityMonitoring.Data;
+
+ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
 var builder = WebApplication.CreateBuilder(args);
 

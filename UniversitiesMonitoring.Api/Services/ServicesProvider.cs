@@ -195,7 +195,21 @@ public class ServicesProvider : IServicesProvider
 
     public Task<UniversityServiceReport?> GetReportAsync(ulong reportId) => _dataProvider.Reports.FindAsync(reportId);
 
-    public IEnumerable<UniversityServiceReport> GetAllReports() => _dataProvider.Reports.GetlAll()
+    /// <inheritdoc />
+    public async Task<byte[]> CreateExcelReportAsync(ulong serviceId)
+    {
+        var service = await _dataProvider.UniversityServices.GetlAll()
+            .FirstOrDefaultAsync(x => x.Id == serviceId);
+
+        if (service == null)
+        {
+            throw new InvalidOperationException("Service not found");
+        }
+        
+        return ServiceExcelReportBuilder.BuildExcel(service);
+    }
+
+    public IEnumerable<UniversityServiceReport>GetAllReports() => _dataProvider.Reports.GetlAll()
         .Include(x => x.Service)
         .Include(x => x.Issuer)
         .Where(x => !x.IsSolved).ToList();

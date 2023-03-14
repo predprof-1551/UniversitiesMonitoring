@@ -2,7 +2,7 @@ import {Navigate, useLocation} from "react-router-dom";
 import {Button} from "../components/Button";
 import {createUseStyles} from "react-jss";
 import Constants from "../Constants";
-import {faStar, faTreeCity} from "@fortawesome/free-solid-svg-icons";
+import {faStar, faTreeCity, faFileExcel, faComment} from "@fortawesome/free-solid-svg-icons";
 import MessagePart from "../assets/images/message-part.svg";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {useEffect, useRef, useState} from "react";
@@ -32,6 +32,22 @@ const useStyles = createUseStyles({
         to: {
             background: "#ededed"
         }
+    },
+    excelExport: {
+        position: "fixed",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        left: 10,
+        bottom: 10,
+        background: "#005a12",
+        width: 64,
+        height: 64,
+        "& *": {
+            color: "#FFF",
+            fontSize: 32
+        },
+        borderRadius: "50%"
     },
     testResultContainerWrapper: {
         background: "#f5f5f5",
@@ -198,18 +214,23 @@ const useStyles = createUseStyles({
     },
     commentFormMobile: {
         position: "fixed",
-        left: 0,
-        bottom: 0,
-        width: "100%",
-        height: "7%",
+        right: 10,
+        bottom: 10,
+        width: 64,
+        height: 64,
+        borderRadius: "50%",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "#FFF",
+        background: Constants.brandColor,
         transition: "background 0.3s",
         cursor: "pointer",
         userSelect: "none",
-        zIndex: 100000000000
+        zIndex: 100000000000,
+        "& *": {
+            fontSize: 32,
+            color: "#FFF"
+        }
     },
     commentFormMobileWrapper: {
         position: "absolute",
@@ -252,6 +273,7 @@ const monthNames = ["янв", "фев", "мар", "апр",
     "сен", "окт", "ноя", "дек"]
 
 export function ServicePage() {
+    const style = useStyles();
     const location = useLocation();
     const [service, setService] = useState(null);
     const [smthgWentWrong, setRedirect] = useState(false);
@@ -287,6 +309,9 @@ export function ServicePage() {
     if (service.changedStatusAt === null) return <ServiceDidntSetupped service={service}/>
 
     return <div className="h-100" style={{background: "#f5f5f5"}}>
+        <div className={style.excelExport}>
+            <a download href={`/api/services/${service.serviceId}/excel`}><FontAwesomeIcon icon={faFileExcel}/></a>
+        </div>
         <ServiceHeader service={service} updateService={updateService}/>
         <TestResultContainer service={service}/>
         <ServiceBody service={service} updateService={updateService}/>
@@ -660,7 +685,7 @@ function SendCommentFormMobile({service, updateService}) {
                                                 closePopup={() => setShowPopup(false)}/>
 
     return <div className={style.commentFormMobile} onClick={() => setShowPopup(true)}>
-        <span className="text-muted">Оставить комментарий</span>
+        <FontAwesomeIcon icon={faComment}/>
     </div>
 }
 

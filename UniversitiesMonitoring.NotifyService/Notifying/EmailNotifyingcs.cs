@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Mail;
+using UniversityMonitoring.Data;
 using UniversityMonitoring.Data.Entities;
 
 namespace UniversitiesMonitoring.NotifyService.Notifying;
@@ -38,10 +39,7 @@ internal class EmailNotifier
             From = _mailAddress,
             Subject = "Изменение состояния сервиса",
             Body =
-                $"<b>📢 Сервис <a href=\"{CreateServiceHref(service)}\">{service.ServiceName}</a> ВУЗа <a href=\"{service.Url}\">{service.UniversityName}</a> изменил свое состояние на {(service.IsOnline ? "онлайн 🟢" : "офлайн 🔴")}</b><br/>",
+                $"<b>📢 Сервис <a href=\"{service.GenerateUrl()}\">{service.ServiceName}</a> ВУЗа <a href=\"{service.Url}\">{service.UniversityName}</a> изменил свое состояние на {(service.IsOnline ? "онлайн 🟢" : "офлайн 🔴")}</b><br/>",
             IsBodyHtml = true
         };
-
-    private string CreateServiceHref(UniversityServiceEntity service) =>
-        $"http://univermonitoring.gym1551.ru/service?serviceId={service.ServiceId}";
 }

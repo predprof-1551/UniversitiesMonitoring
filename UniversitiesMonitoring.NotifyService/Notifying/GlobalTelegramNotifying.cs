@@ -2,6 +2,7 @@ using System.Text;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using UniversityMonitoring.Data;
 using UniversityMonitoring.Data.Entities;
 
 namespace UniversitiesMonitoring.NotifyService.Notifying;
@@ -36,8 +37,5 @@ internal class GlobalTelegramNotifying
     }
 
     private string GenerateStatus(UniversityServiceEntity serviceEntity) =>
-        $"- Сервис [\"{serviceEntity.ServiceName}\"]({CreateServiceHref(serviceEntity)}) ВУЗа [\"{serviceEntity.UniversityName}\"]({serviceEntity.Url}) сменил свое состояние на {(serviceEntity.IsOnline ? "онлайн 🟢" : "оффлайн 🔴")}";
-
-    private string CreateServiceHref(UniversityServiceEntity service) =>
-        $"http://univermonitoring.gym1551.ru/service?serviceId={service.ServiceId}";
+        $"- Сервис [\"{serviceEntity.ServiceName}\"]({serviceEntity.GenerateUrl()}) ВУЗа [\"{serviceEntity.UniversityName}\"]({serviceEntity.Url}) сменил свое состояние на {(serviceEntity.IsOnline ? "онлайн 🟢" : "оффлайн 🔴")}";
 }

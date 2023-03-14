@@ -271,6 +271,10 @@ public class ServicesController : ControllerBase
         return BadRequest("Часть сервисов не найдены");
     }
 
+    [HttpGet("{id:long}/excel")]
+    public async Task<IActionResult> ExcelExport([FromRoute] ulong id) =>
+        File(await _servicesProvider.CreateExcelReportAsync(id), "application/vnd.ms-excel", $"{id}.xlsx");
+
     private static bool CheckIfUserSubscribed(UniversityService service, ulong userId) =>
         service.UserSubscribeToServices.Any(x => x.UserId == userId);
 }
